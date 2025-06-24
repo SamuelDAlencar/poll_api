@@ -2,7 +2,7 @@ import { InvalidParamError, MissingParamError } from "../../errors";
 import {
   badRequest,
   serverError,
-  unauthorized,
+  unauthorized, ok
 } from "../../helpers/http-helper";
 import {
   Controller,
@@ -45,10 +45,7 @@ export class LoginController implements Controller {
         return unauthorized();
       }
 
-      return {
-        statusCode: 200,
-        body: { accessToken },
-      };
+      return ok({ accessToken });
     } catch (error) {
       return serverError(error);
     }
