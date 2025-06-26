@@ -4,7 +4,6 @@ import {
   AddAccount,
   AddAccountModel,
   AccountModel,
-  EmailValidator,
   HttpRequest,
   Validation,
 } from "./signup-protocols";
@@ -13,7 +12,6 @@ import { ok, badRequest, serverError } from "../../helpers/http-helper";
 
 interface SutTypes {
   sut: SignUpController;
-  emailValidatorStub: EmailValidator;
   addAccountStub: AddAccount;
   validationStub: Validation;
 }
@@ -33,16 +31,6 @@ const makeFakeAccount = (): AccountModel => ({
   email: "valid_email@email.com",
   password: "valid_password",
 });
-
-const makeEmailValidator = (): EmailValidator => {
-  class EmailValidatorStub implements EmailValidator {
-    isValid(email: string): boolean {
-      return true;
-    }
-  }
-
-  return new EmailValidatorStub();
-};
 
 const makeAddAccount = (): AddAccount => {
   class MakeAddAccountStub implements AddAccount {
@@ -65,7 +53,6 @@ const makeValidation = (): Validation => {
 };
 
 const makeSut = (): SutTypes => {
-  const emailValidatorStub = makeEmailValidator();
   const addAccountStub = makeAddAccount();
   const validationStub = makeValidation();
 
@@ -73,7 +60,6 @@ const makeSut = (): SutTypes => {
 
   return {
     sut,
-    emailValidatorStub,
     addAccountStub,
     validationStub,
   };
