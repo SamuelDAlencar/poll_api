@@ -7,7 +7,10 @@ import {
 } from "../../helpers/http/http-helper";
 import { MissingParamError } from "../../errors";
 import { HttpRequest } from "../../protocols";
-import { Authentication } from "../../../domain/useCases/authentication";
+import {
+  Authentication,
+  AuthenticationModel,
+} from "../../../domain/useCases/authentication";
 import { Validation } from "./login-protocols";
 
 const makeEmailValidator = (): any => {
@@ -21,7 +24,7 @@ const makeEmailValidator = (): any => {
 
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(email: string, password: string): Promise<string> {
+    async auth(authentication: AuthenticationModel): Promise<string> {
       return new Promise((resolve) => resolve("any_token"));
     }
   }
@@ -73,10 +76,10 @@ describe("Login Controller", () => {
 
     await sut.handler(makeFakeRequest());
 
-    expect(authenticationSpy).toHaveBeenCalledWith(
-      "any_email@email.com",
-      "any_password"
-    );
+    expect(authenticationSpy).toHaveBeenCalledWith({
+      email: "any_email@email.com",
+      password: "any_password",
+    });
   });
 
   test("Should return 401 if invalid credentials are provided", async () => {
