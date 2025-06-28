@@ -11,14 +11,9 @@ export class DbAuthentication implements Authentication {
     this.loadAccountByEmailRepository = loadAccountByEmailRepository;
   }
 
-  auth(authentication: AuthenticationModel): Promise<string> {
-    return this.loadAccountByEmailRepository
-      .load(authentication.email)
-      .then((account) => {
-        if (account && account.password === authentication.password) {
-          return Promise.resolve("valid_token");
-        }
-        return Promise.resolve(null);
-      });
+  async auth(authentication: AuthenticationModel): Promise<string> {
+    await this.loadAccountByEmailRepository.load(authentication.email);
+
+    return null;
   }
 }
