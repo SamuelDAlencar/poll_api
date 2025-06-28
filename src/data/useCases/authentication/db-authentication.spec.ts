@@ -1,10 +1,12 @@
 /* eslint-disable indent */
-import { AuthenticationModel } from "../../../domain/useCases/authentication";
-import { HashComparer } from "../../protocols/criptography/hash-comparer";
-import { TokenGenerator } from "../../protocols/criptography/token-generator";
-import { UpdateAccessTokenRepository } from "../../protocols/criptography/update-access-token-repository";
-import { LoadAccountByEmailRepository } from "../../protocols/db/load-account-by-email-repository";
-import { AccountModel } from "../add-account/db-add-account-protocols";
+import {
+  AuthenticationModel,
+  HashComparer,
+  TokenGenerator,
+  UpdateAccessTokenRepository,
+  LoadAccountByEmailRepository,
+  AccountModel,
+} from "./db-authentication-protocols";
 import { DbAuthentication } from "./db-authentication";
 
 interface SutTypes {
@@ -208,9 +210,8 @@ describe("DbAuthentication UseCase", () => {
     expect(updateSpy).toHaveBeenCalledWith("any_id", "any_token");
   });
 
-  
   test("Should throw if TokenGenerator throws", async () => {
-    const { sut,  updateAccessTokenRepositoryStub } = makeSut();
+    const { sut, updateAccessTokenRepositoryStub } = makeSut();
 
     jest
       .spyOn(updateAccessTokenRepositoryStub, "update")
@@ -222,5 +223,4 @@ describe("DbAuthentication UseCase", () => {
 
     await expect(promise).rejects.toThrow();
   });
-
 });
