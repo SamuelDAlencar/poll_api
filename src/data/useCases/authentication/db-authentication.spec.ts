@@ -1,33 +1,57 @@
 /* eslint-disable indent */
+import { AuthenticationModel } from "../../../domain/useCases/authentication";
 import { LoadAccountByEmailRepository } from "../../protocols/db/load-account-by-email-repository";
 import { AccountModel } from "../add-account/db-add-account-protocols";
 import { DbAuthentication } from "./db-authentication";
 
-describe("DbAuthentication UseCase", () => {
-  test("Should call LoadAccountByEmailRepository with correct email", async () => {
+interface SutTypes {
+  sut: DbAuthentication;
+  loadAccountByEmailRepositoryStub: LoadAccountByEmailRepository;
+}
+
+const makeFakeAccount = (): AccountModel => ({
+  id: "any_id",
+  name: "any_name",
+  email: "any_email@email.com",
+  password: "any_password",
+});
+
+const makeLoadAccountByEmailRepositoryStub =
+  (): LoadAccountByEmailRepository => {
     class LoadAccountByEmailRepositoryStub
       implements LoadAccountByEmailRepository
     {
       async load(email: string): Promise<AccountModel> {
-        const account: AccountModel = {
-          id: "any_id",
-          name: "any_name",
-          email: "any_email@email.com",
-          password: "hashed_password",
-        };
-
-        return new Promise((resolve) => resolve(account));
+        return new Promise((resolve) => resolve(makeFakeAccount()));
       }
     }
 
-    const loadAccountByEmailRepositoryStub =
-      new LoadAccountByEmailRepositoryStub();
+    return new LoadAccountByEmailRepositoryStub();
+  };
 
-    const sut = new DbAuthentication(loadAccountByEmailRepositoryStub);
+const makeFakeAuthentication = (): AuthenticationModel => ({
+  email: "any_email@email.com",
+  password: "any_password",
+});
+
+const makeSut = (): SutTypes => {
+  const loadAccountByEmailRepositoryStub =
+    makeLoadAccountByEmailRepositoryStub();
+  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub);
+
+  return {
+    sut,
+    loadAccountByEmailRepositoryStub,
+  };
+};
+
+describe("DbAuthentication UseCase", () => {
+  test("Should call LoadAccountByEmailRepository with correct email", async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut();
 
     const loadSpy = jest.spyOn(loadAccountByEmailRepositoryStub, "load");
 
-    await sut.auth({ email: "any_email@email.com", password: "any_password" });
+    await sut.auth(makeFakeAuthentication());
 
     expect(loadSpy).toHaveBeenCalledWith("any_email@email.com");
   });
