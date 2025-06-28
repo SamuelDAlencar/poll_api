@@ -39,7 +39,7 @@ const makeLoadAccountByEmailRepositoryStub =
 
 const makeHashComparer = (): HashComparer => {
   class HashComparerStub implements HashComparer {
-    async comparer(value: string, hash: string): Promise<Boolean> {
+    async compare(value: string, hash: string): Promise<Boolean> {
       return new Promise((resolve) => resolve(true));
     }
   }
@@ -135,7 +135,7 @@ describe("DbAuthentication UseCase", () => {
   test("Should call HashComparer with correct values", async () => {
     const { sut, hashComparerStub } = makeSut();
 
-    const compareSpy = jest.spyOn(hashComparerStub, "comparer");
+    const compareSpy = jest.spyOn(hashComparerStub, "compare");
 
     await sut.auth(makeFakeAuthentication());
 
@@ -146,7 +146,7 @@ describe("DbAuthentication UseCase", () => {
     const { sut, hashComparerStub } = makeSut();
 
     jest
-      .spyOn(hashComparerStub, "comparer")
+      .spyOn(hashComparerStub, "compare")
       .mockReturnValueOnce(
         new Promise((resolve, reject) => reject(new Error()))
       );
@@ -160,7 +160,7 @@ describe("DbAuthentication UseCase", () => {
     const { sut, hashComparerStub } = makeSut();
 
     jest
-      .spyOn(hashComparerStub, "comparer")
+      .spyOn(hashComparerStub, "compare")
       .mockReturnValueOnce(new Promise((resolve) => resolve(false)));
 
     const accessToken = await sut.auth(makeFakeAuthentication());
