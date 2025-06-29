@@ -7,5 +7,8 @@ module.exports = [
       "prefer-const": "error",
       indent: ["error", 2],
     },
+    parserOptions: {
+      project: './tsconfig.eslint.json'
+    },
   },
 ];
