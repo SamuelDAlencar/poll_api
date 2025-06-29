@@ -10,7 +10,7 @@ import {
   HttpResponse,
   Authentication,
   Validation,
-} from "./login-protocols";
+} from "./login-protocols-controller";
 
 export class LoginController implements Controller {
   private readonly validation: Validation;

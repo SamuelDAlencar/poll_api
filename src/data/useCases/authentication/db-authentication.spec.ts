@@ -4,10 +4,10 @@ import {
   HashComparer,
   Encrypter,
   UpdateAccessTokenRepository,
-  LoadAccountByEmailRepository,
   AccountModel,
 } from "./db-authentication-protocols";
 import { DbAuthentication } from "./db-authentication";
+import { LoadAccountByEmailRepository } from "../../protocols/db/account/load-account-by-email-repository";
 
 interface SutTypes {
   sut: DbAuthentication;

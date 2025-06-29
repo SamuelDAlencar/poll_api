@@ -1,10 +1,10 @@
 /* eslint-disable indent */
+import { LoadAccountByEmailRepository } from "../../protocols/db/account/load-account-by-email-repository";
 import {
   AuthenticationModel,
   HashComparer,
   Encrypter,
   UpdateAccessTokenRepository,
-  LoadAccountByEmailRepository,
   Authentication,
 } from "./db-authentication-protocols";
 

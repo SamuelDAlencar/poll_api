@@ -5,7 +5,7 @@ import {
 } from "./db-add-account-protocols";
 import { DbAddAccount } from "./db-add-account";
 
-import { AddAccountRepository } from "../../protocols/db/add-account-repository";
+import { AddAccountRepository } from "./db-add-account-protocols";
 
 interface SutTypes {
   sut: DbAddAccount;

@@ -1,4 +1,4 @@
-import { LoginController } from "./login";
+import { LoginController } from "./login-controller";
 import {
   badRequest,
   serverError,
@@ -11,7 +11,7 @@ import {
   Authentication,
   AuthenticationModel,
 } from "../../../domain/useCases/authentication";
-import { Validation } from "./login-protocols";
+import { Validation } from "./login-protocols-controller";
 
 const makeEmailValidator = (): any => {
   class EmailValidatorStub {
