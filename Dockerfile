@@ -1,5 +1,5 @@
 FROM node:20
-WORKDIR /usr/src/clean-node-api
+WORKDIR /usr/src/poll-api
 COPY ./package.json .
 RUN npm install --only=prod
 COPY ./dist ./dist
