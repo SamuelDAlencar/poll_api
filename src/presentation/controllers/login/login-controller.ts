@@ -13,13 +13,10 @@ import {
 } from "./login-protocols-controller";
 
 export class LoginController implements Controller {
-  private readonly validation: Validation;
-  private readonly authentication: Authentication;
-
-  constructor(authentication: Authentication, validation: Validation) {
-    this.validation = validation;
-    this.authentication = authentication;
-  }
+  constructor(
+    private readonly authentication: Authentication,
+    private readonly validation: Validation
+  ) {}
 
   async handler(httpRequest: HttpRequest): Promise<HttpResponse> {
     try {
@@ -31,7 +28,7 @@ export class LoginController implements Controller {
 
       const { email, password } = httpRequest.body;
 
-      const accessToken = await this.authentication.auth({email, password});
+      const accessToken = await this.authentication.auth({ email, password });
 
       if (!accessToken) {
         return unauthorized();
