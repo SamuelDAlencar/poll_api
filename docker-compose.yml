@@ -19,5 +19,5 @@ services:
       - ./dist:/usr/src/poll_api/dist
     ports:
       - "5050:5050"
-    links:
+    depends_on:
       - mongo
