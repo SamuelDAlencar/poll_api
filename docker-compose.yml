@@ -2,15 +2,15 @@ version: "3.8"
 
 services:
   mongo:
+    container_name: poll_api_mongo
     image: mongo:latest
     restart: always
     volumes:
       - ./data:/data/db
-    container_name: poll_api_mongo
     ports:
       - "27017:27017"
   api:
-    container_name: poll_api
+    container_name: poll_api_container
     build: .
     restart: always
     image: poll_api
