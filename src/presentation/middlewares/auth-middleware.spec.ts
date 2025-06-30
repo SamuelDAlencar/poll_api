@@ -12,40 +12,46 @@ const makeFakeAccount = (): AccountModel => ({
   password: "any_password",
 });
 
+interface SutTypes {
+  sut: AuthMiddleware;
+  loadAccontByTokenStub: LoadAccountByToken;
+}
+
+const makeLoadAccountByTokenStub = (): LoadAccountByToken => {
+  class LoadAccountByTokenStub implements LoadAccountByToken {
+    async load(
+      accessToken: string,
+      role?: string
+    ): Promise<AccountModel | null> {
+      return new Promise((resolve) => resolve(makeFakeAccount()));
+    }
+  }
+
+  const loadAccontByTokenStub = new LoadAccountByTokenStub();
+
+  return loadAccontByTokenStub;
+};
+
+const makeSut = (): SutTypes => {
+  const loadAccontByTokenStub = makeLoadAccountByTokenStub();
+
+  const sut = new AuthMiddleware(loadAccontByTokenStub);
+
+  return { sut, loadAccontByTokenStub };
+};
+
 describe("Auth Middleware", () => {
   test("Should return 403 if no x-access-token exists in headers", async () => {
-    class LoadAccountByTokenStub implements LoadAccountByToken {
-      async load(
-        accessToken: string,
-        role?: string
-      ): Promise<AccountModel | null> {
-        return new Promise((resolve) => resolve(makeFakeAccount()));
-      }
-    }
-
-    const loadAccontByTokenStub = new LoadAccountByTokenStub();
-
-    const sut = new AuthMiddleware(loadAccontByTokenStub);
-
+    const { sut } = makeSut();
     const httpResponse = await sut.handler({});
 
     expect(httpResponse).toEqual(forbidden(new AccessDeniedError()));
   });
 
   test("Should call LoadAccountByToken with correct accessToken", async () => {
-    class LoadAccountByTokenStub implements LoadAccountByToken {
-      async load(
-        accessToken: string,
-        role?: string
-      ): Promise<AccountModel | null> {
-        return new Promise((resolve) => resolve(makeFakeAccount()));
-      }
-    }
+    const { sut, loadAccontByTokenStub } = makeSut();
 
-    const loadAccontByTokenStub = new LoadAccountByTokenStub();
     const loadSpy = jest.spyOn(loadAccontByTokenStub, "load");
-
-    const sut = new AuthMiddleware(loadAccontByTokenStub);
 
     await sut.handler({
       headers: { "x-access-token": "any_token" },
