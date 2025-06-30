@@ -36,10 +36,10 @@ const makeLoadAccountByTokenStub = (): LoadAccountByToken => {
   return loadAccontByTokenStub;
 };
 
-const makeSut = (): SutTypes => {
+const makeSut = (role?: string): SutTypes => {
   const loadAccontByTokenStub = makeLoadAccountByTokenStub();
 
-  const sut = new AuthMiddleware(loadAccontByTokenStub);
+  const sut = new AuthMiddleware(loadAccontByTokenStub, role);
 
   return { sut, loadAccontByTokenStub };
 };
@@ -53,13 +53,15 @@ describe("Auth Middleware", () => {
   });
 
   test("Should call LoadAccountByToken with correct accessToken", async () => {
-    const { sut, loadAccontByTokenStub } = makeSut();
+    const role = "any_role";
+    
+    const { sut, loadAccontByTokenStub } = makeSut(role);
 
     const loadSpy = jest.spyOn(loadAccontByTokenStub, "load");
 
     await sut.handler(makeFakeRequest());
 
-    expect(loadSpy).toHaveBeenCalledWith("any_token");
+    expect(loadSpy).toHaveBeenCalledWith("any_token", role);
   });
 
   test("Should return 403 if LoadAccountByToken returns null", async () => {
