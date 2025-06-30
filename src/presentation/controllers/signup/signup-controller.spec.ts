@@ -93,7 +93,7 @@ describe("SignUp Controller", () => {
 
     const httpResponse = await sut.handler(makeFakeRequest());
 
-    expect(httpResponse).toEqual(serverError(new ServerError(null)));
+    expect(httpResponse).toEqual(serverError(new ServerError("any_stack")));
   });
 
   test("Should call AddAccount with correct values", async () => {
@@ -169,14 +169,14 @@ describe("SignUp Controller", () => {
     expect(httpResponse).toEqual(serverError(new Error()));
   });
 
-  test("Should return 403 if AddAccount returns null", () => {
+  test("Should return 403 if AddAccount returns null", async () => {
     const { sut, addAccountStub } = makeSut();
 
     jest
       .spyOn(addAccountStub, "add")
       .mockReturnValueOnce(new Promise((resolve) => resolve(null)));
 
-    const httpResponse = sut.handler(makeFakeRequest());
+    const httpResponse = await sut.handler(makeFakeRequest());
 
     expect(httpResponse).toEqual(forbidden(new EmailInUseError()));
   });
