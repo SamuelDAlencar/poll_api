@@ -1,4 +1,4 @@
-import { forbidden, ok } from "../helpers/http/http-helper";
+import { forbidden, ok, serverError } from "../helpers/http/http-helper";
 import { AccessDeniedError } from "../errors";
 import { AuthMiddleware } from "./auth-middleware";
 import { LoadAccountByToken } from "../../domain/useCases/load-account-by-token";
@@ -79,6 +79,18 @@ describe("Auth Middleware", () => {
 
     const httpResponse = await sut.handler(makeFakeRequest());
 
-    expect(httpResponse).toEqual(ok({accountId: "any_id"}));
+    expect(httpResponse).toEqual(ok({ accountId: "any_id" }));
+  });
+
+  test("Should return 500 if LoadAccountByToken throws", async () => {
+    const { sut, loadAccontByTokenStub } = makeSut();
+
+    jest
+      .spyOn(loadAccontByTokenStub, "load")
+      .mockReturnValueOnce(new Promise((_, reject) => reject(new Error())));
+
+    const httpResponse = await sut.handler(makeFakeRequest());
+
+    expect(httpResponse).toEqual(serverError(new Error()));
   });
 });
