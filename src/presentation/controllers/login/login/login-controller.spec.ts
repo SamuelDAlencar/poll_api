@@ -4,13 +4,13 @@ import {
   serverError,
   unauthorized,
   ok,
-} from "../../helpers/http/http-helper";
-import { MissingParamError } from "../../errors";
-import { HttpRequest } from "../../protocols";
+} from "../../../helpers/http/http-helper";
+import { MissingParamError } from "../../../errors";
+import { HttpRequest } from "../../../protocols";
 import {
   Authentication,
   AuthenticationModel,
-} from "../../../domain/useCases/authentication";
+} from "../../../../domain/useCases/authentication";
 import { Validation } from "./login-controller-protocols";
 
 const makeEmailValidator = (): any => {
