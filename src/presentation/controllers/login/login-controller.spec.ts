@@ -11,7 +11,7 @@ import {
   Authentication,
   AuthenticationModel,
 } from "../../../domain/useCases/authentication";
-import { Validation } from "./login-protocols-controller";
+import { Validation } from "./login-controller-protocols";
 
 const makeEmailValidator = (): any => {
   class EmailValidatorStub {
