@@ -13,7 +13,7 @@ export class AuthMiddleware {
       const accessToken = httpRequest.headers?.["x-access-token"];
 
       if (accessToken) {
-        const account = await this.loadAccountByToken.load(accessToken);
+        const account = await this.loadAccountByToken.load(accessToken, this.role);
 
         if (account) {
           return ok({ accountId: account.id });
