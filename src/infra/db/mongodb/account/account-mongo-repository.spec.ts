@@ -123,7 +123,7 @@ describe("Account Mongo Repository", () => {
         role: "any_role",
       });
 
-      const account = await sut.loadByToken("any_token", 'any_role');
+      const account = await sut.loadByToken("any_token", "any_role");
 
       expect(account).toBeTruthy();
       expect(account.id).toBeTruthy();
@@ -136,6 +136,14 @@ describe("Account Mongo Repository", () => {
       const sut = makeSut();
 
       const account = await sut.loadByEmail("any_email@mail.com");
+
+      expect(account).toBeFalsy();
+    });
+
+    test("Should return null if loadByToken fails", async () => {
+      const sut = makeSut();
+
+      const account = await sut.loadByToken("any_token");
 
       expect(account).toBeFalsy();
     });
