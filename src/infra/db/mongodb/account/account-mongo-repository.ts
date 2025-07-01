@@ -51,6 +51,11 @@ export class AccountMongoRepository
 
     const account = await accountCollection.findOne({
       accessToken: token,
+      $or: [{
+        role
+      }, {
+        role: 'admin'
+      }],
       role,
     });
 
